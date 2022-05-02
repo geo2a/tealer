@@ -8,15 +8,15 @@ class AccountParamsField:
 
 
 class AcctBalance(AccountParamsField):
-    def __str__(self):
+    def __str__(self) -> str:
         return "AcctBalance"
 
 
 class AcctMinBalance(AccountParamsField):
-    def __str__(self):
+    def __str__(self) -> str:
         return "AcctMinBalance"
 
 
 class AcctAuthAddr(AccountParamsField):
-    def __str__(self):
+    def __str__(self) -> str:
         return "AcctAuthAddr"

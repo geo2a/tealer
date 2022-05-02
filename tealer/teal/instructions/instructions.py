@@ -64,7 +64,7 @@ class UNIMPLEMENTED(Instruction):
         super().__init__()
         self._verbatim_opcode = verbatim_opcode
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"UNIMPLEMENTED OPCODE: {self._verbatim_opcode}"
 
 
@@ -1093,16 +1093,15 @@ class Gitxn(Instruction):
     def field(self) -> TransactionField:
         return self._field
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"gitxn {self._idx} {self._field}"
 
 
 class Gitxna(Instruction):
-    def __init__(self, idx: int, field: TransactionField, array_idx: int):
+    def __init__(self, idx: int, field: TransactionField):
         super().__init__()
         self._idx = idx
         self._field: TransactionField = field
-        self._array_idx = array_idx
 
     @property
     def idx(self) -> int:
@@ -1112,12 +1111,8 @@ class Gitxna(Instruction):
     def field(self) -> TransactionField:
         return self._field
 
-    @property
-    def array_idx(self) -> int:
-        return self._array_idx
-
-    def __str__(self):
-        return f"gitxna {self._idx} {self._field} {self._array_idx}"
+    def __str__(self) -> str:
+        return f"gitxna {self._idx} {self._field}"
 
 
 class Gitxnas(Instruction):
@@ -1134,7 +1129,7 @@ class Gitxnas(Instruction):
     def field(self) -> TransactionField:
         return self._field
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"gitxnas {self._idx} {self._field}"
 
 
@@ -1147,27 +1142,27 @@ class AcctParamsGet(Instruction):
     def field(self) -> AccountParamsField:
         return self._field
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"acct_params_get {self._field}"
 
 
 class Divw(Instruction):
-    def __str__(self):
+    def __str__(self) -> str:
         return "divw"
 
 
 class Bsqrt(Instruction):
-    def __str__(self):
+    def __str__(self) -> str:
         return "bsqrt"
 
 
 class Itxn_next(Instruction):
-    def __str__(self):
+    def __str__(self) -> str:
         return "itxn_next"
 
 
 class Gloadss(Instruction):
-    def __str__(self):
+    def __str__(self) -> str:
         return f"gloadss"
 
 
@@ -1180,7 +1175,7 @@ class Itxnas(Instruction):
     def field(self) -> TransactionField:
         return self._field
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"itxnas {self._field}"
 
 
@@ -1193,5 +1188,5 @@ class Method(Instruction):
     def abi_method(self) -> str:
         return self._abi_method
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"method {self._abi_method}"
