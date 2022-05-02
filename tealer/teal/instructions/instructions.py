@@ -1163,7 +1163,7 @@ class Itxn_next(Instruction):
 
 class Gloadss(Instruction):
     def __str__(self) -> str:
-        return f"gloadss"
+        return "gloadss"
 
 
 class Itxnas(Instruction):

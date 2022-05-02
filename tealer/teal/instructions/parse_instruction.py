@@ -2,9 +2,6 @@ from typing import Optional, Callable, Tuple, List
 
 from tealer.teal.instructions import instructions
 from tealer.teal.instructions.instructions import Instruction
-from tealer.teal.instructions.parse_app_params_field import parse_app_params_field
-from tealer.teal.instructions.parse_asset_holding_field import parse_asset_holding_field
-from tealer.teal.instructions.parse_asset_params_field import parse_asset_params_field
 from tealer.teal.instructions.parse_global_field import parse_global_field
 from tealer.teal.instructions.parse_transaction_field import parse_transaction_field
 from tealer.teal.instructions.parse_asset_holding_field import parse_asset_holding_field
