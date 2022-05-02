@@ -15,7 +15,7 @@ class Result:  # pylint: disable=too-few-public-methods
         self.idx = idx
 
     @property
-    def all_bbs_in_paths(self):
+    def all_bbs_in_paths(self) -> List[BasicBlock]:
         return [p for sublist in self.paths for p in sublist]
 
 
@@ -35,9 +35,12 @@ class MissingGroupSize(AbstractDetector):  # pylint: disable=too-few-public-meth
         current_path: List[BasicBlock],
         # use_gtnx: bool,
         all_results: List[Result],
-    ):
-        current_path = current_path + [bb]
+    ) -> None:
+        # check for loops
+        if bb in current_path:
+            return
 
+        current_path = current_path + [bb]
         for ins in bb.instructions:
 
             if isinstance(ins, Global):
@@ -58,7 +61,7 @@ class MissingGroupSize(AbstractDetector):  # pylint: disable=too-few-public-meth
         for next_bb in bb.next:
             self._check_groupsize(next_bb, current_path, all_results)
 
-    def detect(self):
+    def detect(self) -> List[str]:
 
         all_results: List[Result] = []
 
@@ -67,7 +70,7 @@ class MissingGroupSize(AbstractDetector):  # pylint: disable=too-few-public-meth
         all_results_txt: List[str] = []
         for res in all_results:
             description = "Lack of groupSize check found\n"
-            description += "\tFix the paths in {res.filename}\n"
+            description += f"\tFix the paths in {res.filename}\n"
             description += (
                 "\tOr ensure it is used with stateless contracts that check for GroupSize\n"
             )

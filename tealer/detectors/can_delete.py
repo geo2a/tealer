@@ -8,13 +8,13 @@ from tealer.teal.instructions.instructions import Return, Int, Txn, Eq, BNZ
 from tealer.teal.instructions.transaction_field import OnCompletion
 
 
-def _is_delete(ins1: Instruction, ins2: Instruction):
+def _is_delete(ins1: Instruction, ins2: Instruction) -> bool:
     if isinstance(ins1, Int) and ins1.value == "DeleteApplication":
         return isinstance(ins2, Txn) and isinstance(ins2.field, OnCompletion)
     return False
 
 
-def _is_oncompletion_check(ins1: Instruction, ins2: Instruction):
+def _is_oncompletion_check(ins1: Instruction, ins2: Instruction) -> bool:
     if isinstance(ins1, Txn) and isinstance(ins1.field, OnCompletion):
         return isinstance(ins2, Int) and ins2.value in [
             "UpdateApplication",
@@ -35,7 +35,10 @@ class CanDelete(AbstractDetector):  # pylint: disable=too-few-public-methods
         bb: BasicBlock,
         current_path: List[BasicBlock],
         paths_without_check: List[List[BasicBlock]],
-    ):
+    ) -> None:
+        if bb in current_path:
+            return
+
         current_path = current_path + [bb]
 
         # prev_was_oncompletion = False
@@ -56,11 +59,9 @@ class CanDelete(AbstractDetector):  # pylint: disable=too-few-public-methods
                 paths_without_check.append(current_path)
                 return
 
-            if isinstance(ins, BNZ) and prev_was_equal:
-                skip_false = True
+            skip_false = isinstance(ins, BNZ) and prev_was_equal
 
-            if isinstance(ins, BZ) and prev_was_equal:
-                skip_true = True
+            skip_true = isinstance(ins, BZ) and prev_was_equal
 
             prev_was_equal = False
             if isinstance(ins, Eq) and len(stack) >= 2:
@@ -82,7 +83,7 @@ class CanDelete(AbstractDetector):  # pylint: disable=too-few-public-methods
         for next_bb in bb.next:
             self._check_delete(next_bb, current_path, paths_without_check)
 
-    def detect(self):
+    def detect(self) -> List[str]:
 
         paths_without_check: List[List[BasicBlock]] = []
         self._check_delete(self.teal.bbs[0], [], paths_without_check)
