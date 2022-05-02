@@ -1,0 +1,6 @@
+int 0
+acct_params_get AcctBalance
+!
+assert
+int 0
+==

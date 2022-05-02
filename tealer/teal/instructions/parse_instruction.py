@@ -6,6 +6,7 @@ from tealer.teal.instructions.parse_transaction_field import parse_transaction_f
 from tealer.teal.instructions.parse_asset_holding_field import parse_asset_holding_field
 from tealer.teal.instructions.parse_asset_params_field import parse_asset_params_field
 from tealer.teal.instructions.parse_app_params_field import parse_app_params_field
+from tealer.teal.instructions.parse_account_params_field import parse_account_params_field
 
 
 def handle_gtxn(x: str) -> instructions.Gtxn:
@@ -15,11 +16,25 @@ def handle_gtxn(x: str) -> instructions.Gtxn:
     return instructions.Gtxn(idx, tx_field)
 
 
+def handle_gitxn(x: str) -> instructions.Gitxn:
+    split = x.split(" ")
+    idx = int(split[0])
+    tx_field = parse_transaction_field(" ".join(split[1:]), False)
+    return instructions.Gitxn(idx, tx_field)
+
+
 def handle_gtxna(x: str) -> instructions.Gtxna:
     split = x.split(" ")
     idx = int(split[0])
     tx_field = parse_transaction_field(" ".join(split[1:]), False)
     return instructions.Gtxna(idx, tx_field)
+
+
+def handle_gitxna(x: str) -> instructions.Gitxna:
+    split = x.split(" ")
+    idx = int(split[0])
+    tx_field = parse_transaction_field(" ".join(split[1:]), False)
+    return instructions.Gitxna(idx, tx_field)
 
 
 def handle_itxna(x: str) -> instructions.Itxna:
@@ -34,6 +49,13 @@ def handle_gtxnas(x: str) -> instructions.Gtxnas:
     idx = int(args[0])
     tx_field = parse_transaction_field(args[1], True)
     return instructions.Gtxnas(idx, tx_field)
+
+
+def handle_gitxnas(x: str) -> instructions.Gitxnas:
+    args = x.split(" ")
+    idx = int(args[0])
+    tx_field = parse_transaction_field(args[1], True)
+    return instructions.Gitxnas(idx, tx_field)
 
 
 def handle_extract(x: str) -> instructions.Extract:
@@ -60,6 +82,7 @@ parser_rules = [
     ("store ", lambda x: instructions.Store(int(x))),
     ("gload ", lambda x: instructions.Gload(int(x.split(" ")[0]), int(x.split(" ")[1]))),
     ("gloads ", lambda x: instructions.Gloads(int(x))),
+    ("gloadss", lambda x: instructions.Gloadss()),
     ("gaid ", lambda x: instructions.Gaid(int(x))),
     ("gaids", lambda x: instructions.Gaids()),
     ("loads", lambda _x: instructions.Loads()),
@@ -137,6 +160,7 @@ parser_rules = [
     ("b-", lambda x: instructions.BSubtract()),
     ("b/", lambda x: instructions.BDiv()),
     ("b*", lambda x: instructions.BMul()),
+    ("bsqrt", lambda x: instructions.Bsqrt()),
     ("b>=", lambda x: instructions.BGreaterE()),
     ("b>", lambda x: instructions.BGreater()),
     ("b<=", lambda x: instructions.BLessE()),
@@ -146,10 +170,15 @@ parser_rules = [
     ("bzero", lambda x: instructions.BZero()),
     ("log", lambda _x: instructions.Log()),
     ("itxn_begin", lambda _x: instructions.Itxn_begin()),
-    ("itxn_field ", lambda x: instructions.Itxn_field(parse_transaction_field(x, False))),
+    ("itxn_next", lambda x: instructions.Itxn_next()),
+    ("itxn_field ", lambda x: instructions.Itxn_field(parse_transaction_field(x, True))),
     ("itxn_submit", lambda _x: instructions.Itxn_submit()),
     ("itxn ", lambda x: instructions.Itxn(parse_transaction_field(x, False))),
     ("itxna ", lambda x: handle_itxna(x)),
+    ("gitxn", lambda x: handle_gitxn(x)),
+    ("gitxnas", lambda x: handle_gitxnas(x)),
+    ("gitxna", lambda x: handle_gitxna(x)),
+    ("itxnas", lambda x: instructions.Itxnas(parse_transaction_field(x, True))),
     ("txnas ", lambda x: instructions.Txnas(parse_transaction_field(x, True))),
     ("gtxnas ", lambda x: handle_gtxnas(x)),
     ("gtxnsas ", lambda x: instructions.Gtxnsas(parse_transaction_field(x, True))),
@@ -164,6 +193,7 @@ parser_rules = [
     ("mulw", lambda x: instructions.Mulw()),
     ("addw", lambda x: instructions.Addw()),
     ("divmodw", lambda x: instructions.Divmodw()),
+    ("divw", lambda x: instructions.Divw()),
     ("expw", lambda x: instructions.Expw()),
     ("exp", lambda x: instructions.Exp()),
     ("shl", lambda x: instructions.Shl()),
@@ -189,6 +219,8 @@ parser_rules = [
     ("bytecblock", lambda x: instructions.Bytecblock()),
     ("substring ", lambda x: instructions.Substring(x.split(" ")[0], x.split(" ")[1])),
     ("substring3", lambda x: instructions.Substring3()),
+    ("acct_params_get", lambda x: instructions.AcctParamsGet(parse_account_params_field(x))),
+    ("method", lambda x: instructions.Method(x.split(" ")[0])),
 ]
 
 

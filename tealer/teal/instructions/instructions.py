@@ -5,6 +5,7 @@ from tealer.teal.instructions.transaction_field import TransactionField
 from tealer.teal.instructions.asset_holding_field import AssetHoldingField
 from tealer.teal.instructions.asset_params_field import AssetParamsField
 from tealer.teal.instructions.app_params_field import AppParamsField
+from tealer.teal.instructions.account_params_field import AccountParamsField
 
 if TYPE_CHECKING:
     from tealer.teal.basic_blocks import BasicBlock
@@ -1075,3 +1076,121 @@ class Substring(Instruction):
 class Substring3(Instruction):
     def __str__(self):
         return "substring3"
+
+
+class Gitxn(Instruction):
+    def __init__(self, idx: int, field: TransactionField):
+        super().__init__()
+        self._idx = idx
+        self._field: TransactionField = field
+
+    @property
+    def idx(self) -> int:
+        return self._idx
+
+    @property
+    def field(self) -> TransactionField:
+        return self._field
+
+    def __str__(self):
+        return f"gitxn {self._idx} {self._field}"
+
+
+class Gitxna(Instruction):
+    def __init__(self, idx: int, field: TransactionField, array_idx: int):
+        super().__init__()
+        self._idx = idx
+        self._field: TransactionField = field
+        self._array_idx = array_idx
+
+    @property
+    def idx(self) -> int:
+        return self._idx
+
+    @property
+    def field(self) -> TransactionField:
+        return self._field
+
+    @property
+    def array_idx(self) -> int:
+        return self._array_idx
+
+    def __str__(self):
+        return f"gitxna {self._idx} {self._field} {self._array_idx}"
+
+
+class Gitxnas(Instruction):
+    def __init__(self, idx: int, field: TransactionField):
+        super().__init__()
+        self._idx = idx
+        self._field: TransactionField = field
+
+    @property
+    def idx(self) -> int:
+        return self._idx
+
+    @property
+    def field(self) -> TransactionField:
+        return self._field
+
+    def __str__(self):
+        return f"gitxnas {self._idx} {self._field}"
+
+
+class AcctParamsGet(Instruction):
+    def __init__(self, field: AccountParamsField):
+        super().__init__()
+        self._field: AccountParamsField = field
+
+    @property
+    def field(self) -> AccountParamsField:
+        return self._field
+
+    def __str__(self):
+        return f"acct_params_get {self._field}"
+
+
+class Divw(Instruction):
+    def __str__(self):
+        return "divw"
+
+
+class Bsqrt(Instruction):
+    def __str__(self):
+        return "bsqrt"
+
+
+class Itxn_next(Instruction):
+    def __str__(self):
+        return "itxn_next"
+
+
+class Gloadss(Instruction):
+    def __str__(self):
+        return f"gloadss"
+
+
+class Itxnas(Instruction):
+    def __init__(self, field: TransactionField):
+        super().__init__()
+        self._field: TransactionField = field
+
+    @property
+    def field(self) -> TransactionField:
+        return self._field
+
+    def __str__(self):
+        return f"itxnas {self._field}"
+
+
+class Method(Instruction):
+    def __init__(self, abi_method: str):
+        super().__init__()
+        self._abi_method: str = abi_method
+
+    @property
+    def abi_method(self) -> str:
+        return self._abi_method
+
+    def __str__(self):
+        return f"method {self._abi_method}"
