@@ -57,6 +57,15 @@ class Instruction:
         self._bb = b
 
 
+class UNIMPLEMENTED(Instruction):
+    def __init__(self, verbatim_opcode: str):
+        super().__init__()
+        self._verbatim_opcode = verbatim_opcode
+
+    def __str__(self):
+        return f"UNIMPLEMENTED OPCODE: {self._verbatim_opcode}"
+
+
 class Pragma(Instruction):
     def __init__(self, version: int):
         super().__init__()
